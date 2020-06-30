@@ -41,6 +41,7 @@ export class CadastroFornecedorComponent implements OnInit {
         (result)=>{ // pegando a resposta de sucesso da api
           this.mensagemSucesso = result;
           this.mensagemProcessamento = "";
+          formCadastro.reset();
       },
       (e)=>{ // Pegando o erro da api
         const response = JSON.parse(e.error);

@@ -8,6 +8,14 @@
 <div class="row">
     <div class="col-md-12">
 
+        <div class="alert alert-success" [hidden]="!mensagemExclusao">
+            <strong>{{mensagemExclusao}}</strong>
+            <button type="button" class="close" aria-label="Close"
+                (click)="fecharMensagemExclusao()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <table class="table table-bordered table-stripped table-hover">
             <thead>
                 <tr>
@@ -17,19 +25,28 @@
                 </tr>
             </thead> 
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
+                <tr *ngFor="let fornecedor of listagemFornecedores">
+                    <td>{{fornecedor.nome}}</td>
+                    <td>{{fornecedor.cnpj}}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm mr-1">Atualizar</button>
-                        <button class="btn btn-danger btn-sm">Excluir</button>
+                        <button class="btn btn-primary btn-sm mr-1"
+                            (click)="obterFornecedor(fornecedor.idFornecedor)"
+                            data-target="#janela_edicao"
+                            data-toggle="modal">
+                            Atualizar
+                        </button>
+
+                        <button class="btn btn-danger btn-sm"
+                            (click)="excluirFornecedor(fornecedor.idFornecedor)">
+                            Excluir
+                        </button>
                     </td>
                 </tr>
             </tbody> 
             <tfoot>
                 <tr>
                     <td colspan="3">
-                        Quantidade de fornecedores: 0
+                        Quantidade de fornecedores: {{listagemFornecedores.length}}
                     </td>
                 </tr>
             </tfoot>  
@@ -37,3 +54,64 @@
 
     </div>
 </div>
+
+<!-- janela modal para edição de fornecedor -->
+<div id="janela_edicao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-white">Atualizar Fornecedor</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="alert alert-success" [hidden]="!mensagemEdicao">
+                <strong>{{mensagemEdicao}}</strong>
+            </div>
+          
+            <form #formEdicao="ngForm" 
+                (submit)="atualizarFornecedor(formEdicao)">
+
+                <input type="hidden"
+                       name="idFornecedor"
+                       [(ngModel)]="fornecedorEdicao.idFornecedor" />
+
+                <div class="form-group">
+                    <label>Nome do Fornecedor:</label>
+                    <input type="text" class="form-control" 
+                           placeholder="Digite aqui"
+                           autocomplete="off" 
+                           name="nome"
+                           [(ngModel)]="fornecedorEdicao.nome"/>
+                    <div class="text-danger"
+                           *ngFor="let mensagem of errosNome">
+                            {{mensagem}}
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label>CNPJ:</label>
+                    <input type="text" class="form-control" 
+                           placeholder="Digite aqui"
+                           autocomplete="off"
+                           name="cnpj"
+                           [(ngModel)]="fornecedorEdicao.cnpj"  />
+                    <div class="text-danger"
+                           *ngFor="let mensagem of errosCnpj">
+                            {{mensagem}}
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <input type="submit" value="Atualizar Fornecedor" 
+                           class="btn btn-success btn-sm" />
+                </div>
+    
+            </form>   
+
+        </div>
+      </div>
+    </div>
+  </div>

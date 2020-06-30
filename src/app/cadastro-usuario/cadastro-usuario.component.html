@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="col-md-12">
+        <h4>Cadastro de Usuários</h4>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+
+        <div class="alert alert-primary text-center" 
+             [hidden]="!mensagemProcessamento">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <hr />
+            <strong>{{mensagemProcessamento}}</strong>
+        </div>
+
+        <div class="alert alert-success text-center" 
+             [hidden]="!mensagemSucesso">
+            <strong>{{mensagemSucesso}}</strong>
+        </div>
+
+        <div class="alert alert-danger text-center" 
+             [hidden]="!mensagemErro">
+            <strong>{{mensagemErro}}</strong>
+        </div>
+
+        <form #formCadastro="ngForm" (submit)="cadastrarUsuario(formCadastro)">
+
+            <div class="form-group">
+                <label>Nome do Usuário:</label>
+                <input type="text" class="form-control" 
+                       name="nome" ngModel 
+                       placeholder="Digite aqui"
+                       autocomplete="off" />
+                <div class="text-danger"
+                     *ngFor="let mensagem of errosNome">
+                    {{mensagem}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email de Acesso:</label>
+                <input type="text" class="form-control" 
+                       name="email" ngModel 
+                       placeholder="Digite aqui"
+                       autocomplete="off"  />
+                <div class="text-danger"
+                     *ngFor="let mensagem of errosEmail">
+                     {{mensagem}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Senha de Acesso:</label>
+                <input type="password" class="form-control" 
+                       name="senha" ngModel 
+                       placeholder="Digite aqui"
+                       autocomplete="off"  />
+                <div class="text-danger"
+                     *ngFor="let mensagem of errosSenha">
+                     {{mensagem}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Confirme sua Senha:</label>
+                <input type="password" class="form-control" 
+                       name="senhaConfirmacao" ngModel 
+                       placeholder="Digite aqui"
+                       autocomplete="off"  />
+                <div class="text-danger"
+                     *ngFor="let mensagem of errosSenhaConfirmacao">
+                     {{mensagem}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Cadastrar Usuário" 
+                       class="btn btn-success btn-sm" />
+            </div>
+
+        </form>        
+
+    </div>
+</div>

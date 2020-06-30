@@ -8,31 +8,76 @@
 <div class="row">
     <div class="col-md-4">
 
-        <form>
+        <div class="alert alert-primary text-center" 
+             [hidden]="!mensagemProcessamento">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <hr />
+            <strong>{{mensagemProcessamento}}</strong>
+        </div>
+
+        <div class="alert alert-success text-center" 
+             [hidden]="!mensagemSucesso">
+            <strong>{{mensagemSucesso}}</strong>
+        </div>
+
+        <div class="alert alert-danger text-center" 
+             [hidden]="!mensagemErro">
+            <strong>{{mensagemErro}}</strong>
+        </div>
+
+        <form #formCadastro="ngForm" (submit)="cadastrarProduto(formCadastro)">
 
             <div class="form-group">
                 <label>Nome do Produto:</label>
                 <input type="text" class="form-control"
-                    placeholder="Digite aqui"/>
+                    placeholder="Digite aqui"
+                    name="nome" ngModel/>
+                <div class="text-danger"
+                    *ngFor="let mensagem of errosNome">
+                     {{mensagem}}
+               </div>
             </div>
 
             <div class="form-group">
                 <label>Preço:</label>
                 <input type="text" class="form-control"
-                    placeholder="Digite aqui"/>
+                    placeholder="Digite aqui"
+                    name="preco" ngModel/>
+                <div class="text-danger"
+                    *ngFor="let mensagem of errosPreco">
+                     {{mensagem}}
+               </div>
             </div>
 
             <div class="form-group">
                 <label>Quantidade:</label>
                 <input type="text" class="form-control"
-                    placeholder="Digite aqui"/>
+                    placeholder="Digite aqui"
+                    name="quantidade" ngModel/>
+                <div class="text-danger"
+                    *ngFor="let mensagem of errosQuantidade">
+                     {{mensagem}}
+               </div>
             </div>
 
             <div class="form-group">
                 <label>Selecione o Fornecedor:</label>
-                <select class="form-control">
+                <select class="form-control" 
+                    name="idFornecedor" ngModel>
                     <option>Escolha uma opção</option>
+
+                    <option *ngFor="let fornecedor of listagemFornecedores"
+                        value="{{fornecedor.idFornecedor}}">
+                        {{fornecedor.nome}}
+                    </option>
+
                 </select>
+                <div class="text-danger"
+                    *ngFor="let mensagem of errosIdFornecedor">
+                     {{mensagem}}
+               </div>
             </div>
 
             <div class="form-group">
