@@ -8,36 +8,124 @@
 <div class="row">
     <div class="col-md-12">
 
+        <div class="alert alert-success" [hidden]="!mensagemExclusao">
+            <strong>{{mensagemExclusao}}</strong>
+            <button type="button" class="close" aria-label="Close" (click)="fecharMensagemExclusao()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <table class="table table-bordered table-stripped table-hover">
             <thead>
                 <tr>
                     <th>Nome do Produto</th>
                     <th>Preço</th>
                     <th>Quantidade</th>
+                    <th>Total</th>
                     <th>Fornecedor</th>
                     <th width="20%">Operações</th>
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr *ngFor="let produto of listagemProdutos">
+                    <td>{{produto.nome}}</td>
+                    <td>{{produto.preco | currency : 'R$'}}</td>
+                    <td>{{produto.quantidade}}</td>
+                    <td>{{produto.preco * produto.quantidade | currency : 'R$'}}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm mr-1">Atualizar</button>
-                        <button class="btn btn-danger btn-sm">Excluir</button>
+                        {{produto.fornecedor.nome}} <br />
+                        <small>{{produto.fornecedor.cnpj}}</small>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm mr-1" data-target="#janela_edicao" data-toggle="modal"
+                            (click)="obterProduto(produto.idProduto)">
+                            Atualizar
+                        </button>
+                        <button class="btn btn-danger btn-sm" (click)="excluirProduto(produto.idProduto)">
+                            Excluir
+                        </button>
                     </td>
                 </tr>
-            </tbody> 
+            </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5">
-                        Quantidade de fornecedores: 0
+                    <td colspan="6">
+                        Quantidade de produtos: {{listagemProdutos.length}}
                     </td>
                 </tr>
-            </tfoot>  
+            </tfoot>
         </table>
 
+    </div>
+</div>
+
+
+<!-- janela modal para edição de fornecedor -->
+<div id="janela_edicao" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">Atualizar Produto</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="alert alert-success" [hidden]="!mensagemEdicao">
+                    <strong>{{mensagemEdicao}}</strong>
+                </div>
+
+                <form #formEdicao="ngForm" (submit)="atualizarProduto(formEdicao)">
+
+                    <input type="hidden" name="idProduto" [(ngModel)]="produtoEdicao.idProduto" />
+
+                    <div class="form-group">
+                        <label>Nome do Produto:</label>
+                        <input type="text" class="form-control" placeholder="Digite aqui" name="nome"
+                            [(ngModel)]="produtoEdicao.nome" />
+                        <div class="text-danger" *ngFor="let mensagem of errosNome">
+                            {{mensagem}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preço:</label>
+                        <input type="text" class="form-control" placeholder="Digite aqui" name="preco"
+                            [(ngModel)]="produtoEdicao.preco" />
+                        <div class="text-danger" *ngFor="let mensagem of errosPreco">
+                            {{mensagem}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantidade:</label>
+                        <input type="text" class="form-control" placeholder="Digite aqui" name="quantidade"
+                            [(ngModel)]="produtoEdicao.quantidade" />
+                        <div class="text-danger" *ngFor="let mensagem of errosQuantidade">
+                            {{mensagem}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Selecione o Fornecedor:</label>
+                        <select class="form-control" name="idFornecedor" [(ngModel)]="produtoEdicao.idFornecedor">
+                            <option *ngFor="let fornecedor of listagemFornecedores" value="{{fornecedor.idFornecedor}}">
+                                {{fornecedor.nome}}
+                            </option>
+                        </select>
+                        <div class="text-danger" *ngFor="let mensagem of errosIdFornecedor">
+                            {{mensagem}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Atualizar Produto" class="btn btn-success btn-sm" />
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
     </div>
 </div>
