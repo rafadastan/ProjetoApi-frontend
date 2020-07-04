@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import{ HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-cadastro-fornecedor',
@@ -16,13 +17,17 @@ export class CadastroFornecedorComponent implements OnInit {
   errosNome:[];
   errosCnpj:[];
 
-  apiUrl = "http://localhost:58799/api/fornecedores"
+  apiUrl = "http://localhost:58799/api/fornecedores";
+
+  accessToken: string;
 
   //método construtor
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,
+              private cookieService:CookieService) { }
 
   //método
   ngOnInit(): void {
+    this.obterToken();
   }
 
   //método
@@ -35,8 +40,11 @@ export class CadastroFornecedorComponent implements OnInit {
     this.errosNome = [];
     this.errosCnpj = [];
 
+    var httpHeaders = new HttpHeaders()
+        .set('Authorization', 'Bearer ' + this.accessToken);
+
     this.httpClient.post(this.apiUrl,formCadastro.value,
-      {responseType: 'text'})
+      {responseType: 'text', headers:httpHeaders})
       .subscribe( //retorno da api
         (result)=>{ // pegando a resposta de sucesso da api
           this.mensagemSucesso = result;
@@ -54,6 +62,10 @@ export class CadastroFornecedorComponent implements OnInit {
         }
       }
     );
+  }
+
+  obterToken(){
+    this.accessToken = this.cookieService.get("ACCESS_TOKEN");
   }
 
 }

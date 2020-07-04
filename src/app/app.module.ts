@@ -14,6 +14,8 @@ import { RouterModule, Routes } from '@angular/router';
 //importando a bilbioteca para realizar as requisições HTTP para a API
 import { HttpClientModule } from '@angular/common/http';
 
+import { CookieService } from 'ngx-cookie-service';
+
 //importando as bibliotecas para desenvolver formularios dinamicos
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CadastroUsuarioComponent } from './cadastro-usuario/cadastro-usuario.component';
@@ -46,7 +48,9 @@ const appRoutes : Routes = [
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
